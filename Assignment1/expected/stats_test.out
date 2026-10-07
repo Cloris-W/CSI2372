@@ -1,0 +1,30 @@
+mean
+  PASS  mean of {4,-2,9,7,9,0} is 4.5 (no integer division)
+  PASS  mean of {1,2} is 1.5
+  PASS  mean of an empty range is 0.0
+  PASS  mean of the sub-array a+2 (3 elements)
+minMax (pointers)
+  PASS  minMax(a, 6) gives -2 and 9
+  PASS  minMax on one element
+minMax (references, overload)
+  PASS  minMax(vector) gives -8 and 30
+countAbove (recursive)
+  PASS  3 elements above 4
+  PASS  0 elements above 9
+  PASS  empty range gives 0
+  PASS  sub-array a+1 of length 2
+findMax
+  PASS  findMax returns a pointer to the FIRST 9 (index 2)
+  PASS  pointer subtraction gives index 2
+  PASS  findMax on an empty range is nullptr
+apply (function pointers)
+  PASS  apply square
+  PASS  apply negate
+  PASS  apply absolute
+  PASS  apply a user function to the first 2 elements only
+sortValues (qsort, default argument)
+  PASS  ascending by default
+  PASS  descending when ascending == false
+  PASS  comparator does not overflow
+----
+21 passed, 0 failed

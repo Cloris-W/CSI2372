@@ -1,0 +1,11 @@
+1 1
+-42
+# b5_edge -- a 1 x 1 matrix
+print
+row 0
+col 0
+above 0 -42
+sort 0 desc
+apply 0 square
+transpose
+max

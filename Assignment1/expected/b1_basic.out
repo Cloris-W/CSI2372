@@ -1,0 +1,33 @@
+==== Report #1: matrix 3 x 5 ====
+   12   15   -3    8   20
+    7    7    7    7    7
+   -4    0   25   11    3
+==== Report #2: row 0 ====
+  values    : 12 15 -3 8 20
+  mean      : 10.40
+  min       : -3
+  max       : 20
+==== Report #3: row 2 ====
+  values    : -4 0 25 11 3
+  mean      : 7.00
+  min       : -4
+  max       : 25
+==== Report #4: column 2 ====
+  mean      : 9.67
+==== Report #5: row 0 above 8 ====
+  count     : 3
+==== Report #6: row sums ====
+  row 0     : 52
+  row 1     : 35
+  row 2     : 35
+==== Report #7: transpose 5 x 3 ====
+   12    7   -4
+   15    7    0
+   -3    7   25
+    8    7   11
+   20    7    3
+==== Report #8: maximum ====
+  value     : 25
+  row       : 2
+  column    : 2
+---- 8 report(s) printed ----

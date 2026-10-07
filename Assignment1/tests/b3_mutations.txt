@@ -1,0 +1,16 @@
+4 4
+9 -3 5 1
+2 8 -6 4
+0 0 0 0
+-1 -1 10 -1
+# b3_mutations -- sort and apply change the matrix; later commands see the changes
+sort 0
+sort 1 desc
+apply 3 abs
+apply 1 square
+apply 0 negate
+print
+sums
+max
+transpose
+row 3

@@ -1,0 +1,22 @@
+==== Report #1: matrix 1 x 1 ====
+  -42
+==== Report #2: row 0 ====
+  values    : -42
+  mean      : -42.00
+  min       : -42
+  max       : -42
+==== Report #3: column 0 ====
+  mean      : -42.00
+==== Report #4: row 0 above -42 ====
+  count     : 0
+==== Report #5: row 0 sorted desc ====
+  values    : -42
+==== Report #6: row 0 after square ====
+  values    : 1764
+==== Report #7: transpose 1 x 1 ====
+ 1764
+==== Report #8: maximum ====
+  value     : 1764
+  row       : 0
+  column    : 0
+---- 8 report(s) printed ----
