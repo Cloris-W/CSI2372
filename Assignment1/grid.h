@@ -28,9 +28,6 @@ int* rowSums(int** m, int rows, int cols);
 // Mean of column col as a real number.
 double columnMean(int** m, int rows, int col);
 
-// Sorts a row in place, ascending by default. When descending is true, reverse order.
-void sort(int* a, int n, bool descending = false);
-
 // Returns a NEW cols x rows matrix t with t[j][i] == m[i][j].
 // The caller must release it with destroy(t, cols).
 int** transpose(int** m, int rows, int cols);

@@ -1,4 +1,4 @@
-// main.cpp -- DataGrid command interpreter.  STARTER CODE -- complete the parts marked TODO
+// main.cpp -- DataGrid command interpreter.
 //
 // Usage:  ./datagrid data.txt        (or:  ./datagrid < data.txt)
 // Input:  a line "rows cols", then rows*cols integers, then one command per line.
@@ -21,6 +21,7 @@ extern int reportsPrinted;               // defined in report.cpp (also declared
 typedef void (*Handler)(int** m, int rows, int cols, std::istringstream& args);
 
 // ---------------------------------------------------------------- helpers
+// Read one index from args; cmd and what label errors, limit gives the exclusive upper bound. Write through index; return validity.
 static bool readIndex(std::istringstream& args, const char* cmd, const char* what,
                       int limit, int& index) {
     if (!(args >> index)) {
@@ -34,6 +35,7 @@ static bool readIndex(std::istringstream& args, const char* cmd, const char* wha
     return true;
 }
 
+// Print n elements from borrowed row pointer r; return no value and do not change or release the row.
 static void printRow(const int* r, int n) {
     cout << "  values    :";
     for (const int* p = r; p != r + n; ++p) cout << ' ' << *p;
@@ -41,11 +43,13 @@ static void printRow(const int* r, int n) {
 }
 
 // ---------------------------------------------------------------- handlers
+// Print borrowed rows x cols matrix m; command arguments are unused. Handlers do not own m.
 static void cmdPrint(int** m, int rows, int cols, std::istringstream&) {
     report::header("matrix " + std::to_string(rows) + " x " + std::to_string(cols));
     grid::print(cout, m, rows, cols);
 }
 
+// Read and validate a row from args against rows; print its cols values and statistics. Borrow m without freeing it.
 static void cmdRow(int** m, int rows, int cols, std::istringstream& args) {
     int r;
     if (!readIndex(args, "row", "row", rows, r)) return;
@@ -58,26 +62,28 @@ static void cmdRow(int** m, int rows, int cols, std::istringstream& args) {
     report::print("max", hi);
 }
 
+// Read and validate a column from args against cols; print its mean over rows. Borrow m without freeing it.
 static void cmdCol(int** m, int rows, int cols, std::istringstream& args) {
-    // TODO: read a column index with readIndex, then print its mean (grid::columnMean).
     int c;
     if (!readIndex(args, "col", "column", cols, c)) return;
     report::header("column " + std::to_string(c));
     report::print("mean", grid::columnMean(m, rows, c));
 }
 
+// Read a row and integer threshold from args; print the recursive count over cols elements. Borrow the rows x cols matrix m.
 static void cmdAbove(int** m, int rows, int cols, std::istringstream& args) {
     int r;
-    double threshold;
+    int threshold;
     if (!readIndex(args, "above", "row", rows, r)) return;
     if (!(args >> threshold)) {
         cout << "error: missing threshold for 'above'\n";
         return;
     }
-    report::header("row " + std::to_string(r) + " above " + std::to_string((int)threshold));
-    report::print("count", stats::countAbove(m[r], cols, static_cast<int>(threshold)));
+    report::header("row " + std::to_string(r) + " above " + std::to_string(threshold));
+    report::print("count", stats::countAbove(m[r], cols, threshold));
 }
 
+// Print the sums of rows in borrowed rows x cols matrix m; own and delete[] the temporary sums. Arguments are unused.
 static void cmdSums(int** m, int rows, int cols, std::istringstream&) {
     int* rowSums = grid::rowSums(m, rows, cols);
     report::header("row sums");
@@ -87,6 +93,7 @@ static void cmdSums(int** m, int rows, int cols, std::istringstream&) {
     delete[] rowSums;
 }
 
+// Print a new transpose of borrowed rows x cols matrix m, then destroy the temporary using cols rows. Arguments are unused.
 static void cmdTranspose(int** m, int rows, int cols, std::istringstream&) {
     int** t = grid::transpose(m, rows, cols);
     report::header("transpose " + std::to_string(cols) + " x " + std::to_string(rows));
@@ -94,6 +101,7 @@ static void cmdTranspose(int** m, int rows, int cols, std::istringstream&) {
     grid::destroy(t, cols);
 }
 
+// Read a row and optional order from args, validate using rows, then sort its cols elements in caller-owned m and print them.
 static void cmdSort(int** m, int rows, int cols, std::istringstream& args) {
     int r;
     std::string order;
@@ -106,10 +114,12 @@ static void cmdSort(int** m, int rows, int cols, std::istringstream& args) {
         return;
     }
     report::header("row " + std::to_string(r) + " sorted " + order);
-    grid::sort(m[r], cols, order == "desc");
+    if (order == "asc") stats::sortValues(m[r], cols);
+    else stats::sortValues(m[r], cols, false);
     printRow(m[r], cols);
 }
 
+// Read a row and function name from args; use parallel tables to transform cols elements of caller-owned m after validating rows.
 static void cmdApply(int** m, int rows, int cols, std::istringstream& args) {
     int r;
     std::string fname;
@@ -132,6 +142,7 @@ static void cmdApply(int** m, int rows, int cols, std::istringstream& args) {
          << "' (use negate, square or abs)\n";
 }
 
+// Search borrowed rows x cols matrix m in row order; print the first maximum and its indices. Arguments are unused.
 static void cmdMax(int** m, int rows, int cols, std::istringstream&) {
     int bestRow = -1;
     int bestCol = 0;
@@ -161,6 +172,7 @@ static Handler HANDLERS[] = {cmdPrint, cmdRow, cmdCol, cmdAbove, cmdSums,
                             cmdTranspose, cmdSort, cmdApply, cmdMax};
 static const int NUM_COMMANDS = sizeof(HANDLERS) / sizeof(HANDLERS[0]);
 
+// Look up borrowed command name in parallel tables; return a function pointer, or nullptr if unknown. No allocation.
 static Handler lookup(const string& name) {
     for (int i = 0; i < NUM_COMMANDS; ++i) {
         if (name == NAMES[i]) return HANDLERS[i];
@@ -169,6 +181,7 @@ static Handler lookup(const string& name) {
 }
 
 // ---------------------------------------------------------------- main
+// Use argc/argv to select file input or stdin, own the matrix, dispatch commands and release it; return 1 for input errors, otherwise 0.
 int main(int argc, char* argv[]) {
     std::ifstream file;
     if (argc > 1) {

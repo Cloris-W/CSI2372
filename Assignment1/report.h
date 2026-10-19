@@ -17,6 +17,7 @@ void header(const std::string& title);
 void print(const std::string& label, int value);
 void print(const std::string& label, double value);
 
+// Return whether i is between inclusive bounds lo and hi; all parameters are passed by value.
 // Inline helper, defined in the header (Lecture 2, Part 8).
 inline bool inRange(int i, int lo, int hi) { return lo <= i && i <= hi; }
 
