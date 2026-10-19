@@ -1,0 +1,35 @@
+==== Report #1: row 0 sorted asc ====
+  values    : -3 1 5 9
+==== Report #2: row 1 sorted desc ====
+  values    : 8 4 2 -6
+==== Report #3: row 3 after abs ====
+  values    : 1 1 10 1
+==== Report #4: row 1 after square ====
+  values    : 64 16 4 36
+==== Report #5: row 0 after negate ====
+  values    : 3 -1 -5 -9
+==== Report #6: matrix 4 x 4 ====
+    3   -1   -5   -9
+   64   16    4   36
+    0    0    0    0
+    1    1   10    1
+==== Report #7: row sums ====
+  row 0     : -12
+  row 1     : 120
+  row 2     : 0
+  row 3     : 13
+==== Report #8: maximum ====
+  value     : 64
+  row       : 1
+  column    : 0
+==== Report #9: transpose 4 x 4 ====
+    3   64    0    1
+   -1   16    0    1
+   -5    4    0   10
+   -9   36    0    1
+==== Report #10: row 3 ====
+  values    : 1 1 10 1
+  mean      : 3.25
+  min       : 1
+  max       : 10
+---- 10 report(s) printed ----

@@ -1,0 +1,13 @@
+==== Report #1: maximum ====
+  value     : -2
+  row       : 0
+  column    : 2
+==== Report #2: row 1 ====
+  values    : -8 -2 -3 -6
+  mean      : -4.75
+  min       : -8
+  max       : -2
+==== Report #3: row sums ====
+  row 0     : -23
+  row 1     : -19
+---- 3 report(s) printed ----

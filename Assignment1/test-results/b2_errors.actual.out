@@ -1,0 +1,15 @@
+error: unknown command 'average'
+error: missing row for 'row'
+error: row 2 out of range [0, 1]
+error: row -1 out of range [0, 1]
+error: column 3 out of range [0, 2]
+error: missing threshold for 'above'
+error: unknown order 'sideways' (use asc or desc)
+error: missing function for 'apply'
+error: unknown function 'cube' (use negate, square or abs)
+==== Report #1: row 1 ====
+  values    : 4 5 6
+  mean      : 5.00
+  min       : 4
+  max       : 6
+---- 1 report(s) printed ----
