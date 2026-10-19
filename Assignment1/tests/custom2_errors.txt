@@ -1,0 +1,19 @@
+2 2
+-2 5
+5 -2
+# Invalid commands must not generate reports or change the matrix.
+col -1
+apply 0 cube
+apply 0
+row
+above 1
+sort 1 sideways
+average
+# Valid commands after the errors must still work, starting at Report #1.
+row 1
+apply 1 abs
+max
+col 1
+quit
+# This must not execute.
+print

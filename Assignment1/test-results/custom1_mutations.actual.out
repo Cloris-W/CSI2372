@@ -1,0 +1,31 @@
+==== Report #1: maximum ====
+  value     : 3
+  row       : 0
+  column    : 2
+==== Report #2: row 0 above 3 ====
+  count     : 0
+==== Report #3: row 0 sorted asc ====
+  values    : -3 0 3
+==== Report #4: row 0 after square ====
+  values    : 9 0 9
+==== Report #5: row 1 after negate ====
+  values    : -3 3 0
+==== Report #6: row 1 sorted desc ====
+  values    : 3 0 -3
+==== Report #7: maximum ====
+  value     : 9
+  row       : 0
+  column    : 0
+==== Report #8: column 0 ====
+  mean      : 6.00
+==== Report #9: row sums ====
+  row 0     : 18
+  row 1     : 0
+==== Report #10: transpose 3 x 2 ====
+    9    3
+    0    0
+    9   -3
+==== Report #11: matrix 2 x 3 ====
+    9    0    9
+    3    0   -3
+---- 11 report(s) printed ----

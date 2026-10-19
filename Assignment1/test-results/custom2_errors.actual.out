@@ -1,0 +1,21 @@
+error: column -1 out of range [0, 1]
+error: unknown function 'cube' (use negate, square or abs)
+error: missing function for 'apply'
+error: missing row for 'row'
+error: missing threshold for 'above'
+error: unknown order 'sideways' (use asc or desc)
+error: unknown command 'average'
+==== Report #1: row 1 ====
+  values    : 5 -2
+  mean      : 1.50
+  min       : -2
+  max       : 5
+==== Report #2: row 1 after abs ====
+  values    : 5 2
+==== Report #3: maximum ====
+  value     : 5
+  row       : 0
+  column    : 1
+==== Report #4: column 1 ====
+  mean      : 3.50
+---- 4 report(s) printed ----

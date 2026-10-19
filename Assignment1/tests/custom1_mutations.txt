@@ -1,0 +1,19 @@
+2 3
+-3 0 3
+3 -3 0
+# Equal maxima: choose the first in row order.
+max
+# Strict comparison: a value equal to the threshold is not counted.
+above 0 3
+# Default ascending order, followed by transformations and explicit descending.
+sort 0
+apply 0 square
+apply 1 negate
+sort 1 desc
+max
+col 0
+sums
+# Printing afterwards checks that transpose does not change the stored matrix.
+transpose
+print
+quit
