@@ -11,9 +11,10 @@ static const int LABEL_WIDTH = 10;      // hidden global: internal linkage (this
 namespace report {
 
 void header(const std::string& title) {
-    // TODO: use a STATIC LOCAL counter to number the reports 1, 2, 3, ...
-    //       and increment the global reportsPrinted.
-    //       Output format:   ==== Report #3: row 0 ====
+    static int counter = 0;
+    ++counter;
+    ++reportsPrinted;
+    std::cout << "==== Report #" << counter << ": " << title << " ====" << '\n';
 }
 
 void print(const std::string& label, int value) {
@@ -22,8 +23,9 @@ void print(const std::string& label, int value) {
 }
 
 void print(const std::string& label, double value) {
-    // TODO: same layout as the int version, with exactly 2 decimals (std::fixed, std::setprecision).
-    //       Restore the stream afterwards: std::cout.unsetf(std::ios::fixed);
+    std::cout << "  " << std::left << std::setw(LABEL_WIDTH) << label << std::right
+              << ": " << std::fixed << std::setprecision(2) << value << '\n';
+    std::cout.unsetf(std::ios::fixed);
 }
 
 } // namespace report

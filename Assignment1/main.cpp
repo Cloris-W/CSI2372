@@ -60,51 +60,111 @@ static void cmdRow(int** m, int rows, int cols, std::istringstream& args) {
 
 static void cmdCol(int** m, int rows, int cols, std::istringstream& args) {
     // TODO: read a column index with readIndex, then print its mean (grid::columnMean).
-
+    int c;
+    if (!readIndex(args, "col", "column", cols, c)) return;
+    report::header("column " + std::to_string(c));
+    report::print("mean", grid::columnMean(m, rows, c));
 }
 
 static void cmdAbove(int** m, int rows, int cols, std::istringstream& args) {
-    // TODO: read a row and a threshold; print the count (stats::countAbove).
-
+    int r;
+    double threshold;
+    if (!readIndex(args, "above", "row", rows, r)) return;
+    if (!(args >> threshold)) {
+        cout << "error: missing threshold for 'above'\n";
+        return;
+    }
+    report::header("row " + std::to_string(r) + " above " + std::to_string((int)threshold));
+    report::print("count", stats::countAbove(m[r], cols, static_cast<int>(threshold)));
 }
 
 static void cmdSums(int** m, int rows, int cols, std::istringstream&) {
-    // TODO: print each row sum (grid::rowSums). You own the returned array.
-
+    int* rowSums = grid::rowSums(m, rows, cols);
+    report::header("row sums");
+    for (int i = 0; i < rows; ++i) {
+        report::print("row " + std::to_string(i), rowSums[i]);
+    }
+    delete[] rowSums;
 }
 
 static void cmdTranspose(int** m, int rows, int cols, std::istringstream&) {
-    // TODO: print the transpose, then free it. How many rows does it have?
-
+    int** t = grid::transpose(m, rows, cols);
+    report::header("transpose " + std::to_string(cols) + " x " + std::to_string(rows));
+    grid::print(cout, t, cols, rows);
+    grid::destroy(t, cols);
 }
 
 static void cmdSort(int** m, int rows, int cols, std::istringstream& args) {
-    // TODO: optional word asc|desc after the row; use the default argument for asc.
-
+    int r;
+    std::string order;
+    if (!readIndex(args, "sort", "row", rows, r)) return;
+    if (!(args >> order)) {
+        order = "asc";
+    }
+    if (order != "asc" && order != "desc") {
+        cout << "error: unknown order '" << order << "' (use asc or desc)\n";
+        return;
+    }
+    report::header("row " + std::to_string(r) + " sorted " + order);
+    grid::sort(m[r], cols, order == "desc");
+    printRow(m[r], cols);
 }
 
 static void cmdApply(int** m, int rows, int cols, std::istringstream& args) {
-    // TODO: look the function name up in two parallel arrays:
-    //   const char* fnames[] = {"negate", "square", "abs"};
-    //   int (*fns[])(int)   = {stats::negate, stats::square, stats::absolute};
-
+    int r;
+    std::string fname;
+    if (!readIndex(args, "apply", "row", rows, r)) return;
+    if (!(args >> fname)) {
+        cout << "error: missing function for 'apply'\n";
+        return;
+    }
+    const char* fnames[] = {"negate", "square", "abs"};
+    int (*fns[])(int) = {stats::negate, stats::square, stats::absolute};
+    for (int i = 0; i < 3; ++i) {
+        if (fname == fnames[i]) {
+            stats::apply(m[r], cols, fns[i]);
+            report::header("row " + std::to_string(r) + " after " + fname);
+            printRow(m[r], cols);
+            return;
+        }
+    }
+    cout << "error: unknown function '" << fname
+         << "' (use negate, square or abs)\n";
 }
 
 static void cmdMax(int** m, int rows, int cols, std::istringstream&) {
-    // TODO: largest value of the whole matrix: stats::findMax on each row, then
-    //       its column is found by POINTER SUBTRACTION.
-
+    int bestRow = -1;
+    int bestCol = 0;
+    int bestValue = 0;
+    bool found = false;
+    for (int r = 0; r < rows; ++r) {
+        int* rowMaxPtr = stats::findMax(m[r], cols);
+        if (rowMaxPtr == nullptr) continue;
+        if (!found || *rowMaxPtr > bestValue) {
+            found = true;
+            bestValue = *rowMaxPtr;
+            bestRow = r;
+            bestCol = static_cast<int>(rowMaxPtr - m[r]);
+        }
+    }
+    if (!found) return;
+    report::header("maximum");
+    report::print("value", bestValue);
+    report::print("row", bestRow);
+    report::print("column", bestCol);
 }
 
 // ---------------------------------------------------------------- dispatch table
 static const char* NAMES[] = {"print", "row", "col", "above", "sums",
                               "transpose", "sort", "apply", "max"};
-// TODO: the array of function pointers, in the same order as NAMES.
-static Handler HANDLERS[] = {cmdPrint, cmdRow /* , ... */};
+static Handler HANDLERS[] = {cmdPrint, cmdRow, cmdCol, cmdAbove, cmdSums,
+                            cmdTranspose, cmdSort, cmdApply, cmdMax};
 static const int NUM_COMMANDS = sizeof(HANDLERS) / sizeof(HANDLERS[0]);
 
 static Handler lookup(const string& name) {
-    // TODO: return the handler whose name matches, or nullptr.
+    for (int i = 0; i < NUM_COMMANDS; ++i) {
+        if (name == NAMES[i]) return HANDLERS[i];
+    }
     return nullptr;
 }
 
