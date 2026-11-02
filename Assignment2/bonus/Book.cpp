@@ -4,10 +4,17 @@
 
 int Book::totalBooks = 0;
 
-Book::Book(const char* title, int year, Genre genre) {
+Book::Book(const char* title, int year, Genre genre)
+    : title(new char[std::strlen(title) + 1]), year(year), genre(genre) {
+    std::strcpy(this->title, title);
+    ++totalBooks;
 }
 
-Book::Book(const Book& other) {
+Book::Book(const Book& other)
+    : title(new char[std::strlen(other.title) + 1]),
+      year(other.year), genre(other.genre) {
+    std::strcpy(title, other.title);
+    ++totalBooks;
 }
 
 Book::~Book() {
@@ -28,6 +35,28 @@ void Book::setYear(int newYear) {
 }
 
 void Book::display() const {
+    std::cout << title << " (" << year << ") - ";
+
+    // if (genre == 1) would not compile: enum class does not implicitly
+    // convert to int, preventing accidental comparisons with unrelated numbers.
+    switch (genre) {
+        case Genre::NOVEL:
+            std::cout << "Novel";
+            break;
+        case Genre::SCIENCE_FICTION:
+            std::cout << "Science Fiction";
+            break;
+        case Genre::HISTORY:
+            std::cout << "History";
+            break;
+        case Genre::CHILDRENS:
+            std::cout << "Childrens";
+            break;
+        case Genre::OTHER:
+            std::cout << "Other";
+            break;
+    }
+    std::cout << std::endl;
 }
 
 const char* Book::getTitle() const {
@@ -43,5 +72,5 @@ int Book::bookCount() {
 }
 
 Book::Genre Book::getGenre() const {
+    return genre;
 }
-
